@@ -4,6 +4,7 @@ import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { Model, isValidObjectId } from 'mongoose';
+import { PaginationDto } from 'src/common/DTOs/pagination.dto';
 
 @Injectable()
 export class PokemonService {
@@ -26,8 +27,30 @@ export class PokemonService {
     }
   }
 
+  /**
+   * Elimina todos los pokemons que existan, e inserta un nuevo array de pokemons
+   * @param createPokemonsDto array de nuevos pokemon a insertar
+   * @returns 
+   */
+  async recreateManySeed(createPokemonsDto: CreatePokemonDto[]) {
+    try {
+      await this.pokemonModel.deleteMany({});
+
+      const pokemon = await this.pokemonModel.insertMany(createPokemonsDto);
+      return pokemon;
+    } catch (error) {
+      this.handleException(error);
+    }
+  }
+
   findAll() {
     return this.pokemonModel.find();
+  }
+
+  findAllPaginated({limit, offset}: PaginationDto) {
+    return this.pokemonModel.find()
+                            .limit(limit)
+                            .skip(offset);
   }
 
   async findOne(term: string) {

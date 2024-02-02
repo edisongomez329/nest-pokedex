@@ -9,10 +9,16 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+
+      //convierte los datos recibidos en nuestros end-points, toca tener cuidado de usarlos por que esto hace que sea mas el consumo de memoria
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true
+      }
     })
-   );
+  );
 
   await app.listen(3000);
 }
