@@ -58,7 +58,6 @@ export class SeedService {
       }; 
       pokemons.push(pokemon);
     });
-    console.log("Pokemons a insertar", pokemons);
     //await this.pokemonService.recreateManySeed(pokemons);
     await this.recreateManySeed(pokemons);
   }

@@ -5,14 +5,25 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { Model, isValidObjectId } from 'mongoose';
 import { PaginationDto } from 'src/common/DTOs/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
 
+  private defaultLimit: number;
+
   constructor(
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>
-  ) { }
+    private readonly pokemonModel: Model<Pokemon>,
+    private readonly configService: ConfigService
+  ) { 
+
+    //console.log(process.env.PORT);
+    //console.log(process.env.DEFAULT_LIMIT);
+    this.defaultLimit = configService.get<number>('defaultLimit');
+    //console.log({defaultLimit: this.defaultLimit});
+    //console.log(configService.get('defaultLimit'));
+  }
 
   @HttpCode(HttpStatus.OK) //sirve para personalizar los códigos de respuesta HTTP
   async create(createPokemonDto: CreatePokemonDto) {

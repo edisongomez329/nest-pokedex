@@ -22,8 +22,6 @@ export class PokemonController {
 
   @Get('findAllPaginated')
   findAllPaginated(@Query() paginationDto: PaginationDto) {
-    console.log("Paginando");
-    console.log(paginationDto);
     return this.pokemonService.findAllPaginated(paginationDto);
   }
 
