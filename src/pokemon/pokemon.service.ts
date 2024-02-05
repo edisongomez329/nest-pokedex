@@ -47,10 +47,22 @@ export class PokemonService {
     return this.pokemonModel.find();
   }
 
-  findAllPaginated({limit, offset}: PaginationDto) {
+  /**
+   * OBtención de los pokemon, con paginación
+   * .select('-__v');           //Excluye una columna seleccionada, para el response
+   * .select(['-__v', '-no']);  //Excluye las columnas seleccionadas, para el response
+   * @param param0 lo parametros son opcionales, sino se establecen, por defecto con la desesctructuración se establecen en limit = 10, offset = 0
+   * @returns 
+   */
+  findAllPaginated({limit = 10, offset = 0}: PaginationDto) {
+    
     return this.pokemonModel.find()
                             .limit(limit)
-                            .skip(offset);
+                            .skip(offset)                            
+                            .sort({
+                              no: -1
+                            })
+                            .select('-__v');
   }
 
   async findOne(term: string) {
